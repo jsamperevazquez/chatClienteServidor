@@ -3,20 +3,29 @@ import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Scanner;
 
 
 public class ClienteChat {
     private JPanel panel1;
     private JLabel chatLabel;
-    private JTextField mensajeField;
-    private JButton enviarButton;
     private JButton cerrarButton;
+    private JTextArea textArea;
+    private JTextField portField;
+    private JTextField direcField;
+    private JButton enviarButton;
+    private JTextField nickField;
+    private JButton conectarButton;
+    private JTextField mensajeField;
     static boolean infintoC = true;
     static Socket skCliente;
     public static void main(String[] args) {
+        JFrame frame = new JFrame("ANGEL_MESSENGER");
+        frame.setContentPane(new ClienteChat().panel1);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(800, 800); // Le damos un tamano deseado porque el pack() lo pone demasiado pequeno
+        frame.setVisible(true);
+        frame.setLocationRelativeTo(null); //Situamos el frame en el centro de la pantalla
         ClienteChat clienteChat = new ClienteChat();
         int puerto = 0; //Número de puerto para conexión con servidor
         String servidor = ""; //IP o nombre DNS del servidor al que nos conectaremos
