@@ -24,7 +24,7 @@
       <component id="eb2f4" class="javax.swing.JLabel">
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
-            <preferred-size width="59" height="61"/>
+            <preferred-size width="59" height="56"/>
           </grid>
         </constraints>
         <properties>
@@ -35,7 +35,7 @@
       <component id="b800f" class="javax.swing.JTextField" binding="direcField">
         <constraints>
           <grid row="0" column="1" row-span="1" col-span="8" vsize-policy="0" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false">
-            <preferred-size width="345" height="61"/>
+            <preferred-size width="345" height="56"/>
             <maximum-size width="140" height="30"/>
           </grid>
         </constraints>

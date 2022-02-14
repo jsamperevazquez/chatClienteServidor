@@ -1,33 +1,18 @@
-import javax.swing.*;
+package segundo;
+
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
 
-public class ClienteChat {
-    private JPanel panel1;
-    private JLabel chatLabel;
-    private JButton cerrarButton;
-    private JTextArea textArea;
-    private JTextField portField;
-    private JTextField direcField;
-    private JButton enviarButton;
-    private JTextField nickField;
-    private JButton conectarButton;
-    private JTextField mensajeField;
+public class SegundoCliente {
     static boolean infintoC = true;
     static Socket skCliente;
-
     public static void main(String[] args) {
-        JFrame frame = new JFrame("ANGEL_MESSENGER");
-        frame.setContentPane(new ClienteChat().panel1);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 800); // Le damos un tamano deseado porque el pack() lo pone demasiado pequeno
-        frame.setVisible(true);
-        frame.setLocationRelativeTo(null); //Situamos el frame en el centro de la pantalla
-        ClienteChat clienteChat = new ClienteChat();
-        int puerto = 0; //Numero de puerto para conexi贸n con servidor
+
+        SegundoCliente clienteChat = new SegundoCliente();
+        int puerto = 0; //Numero de puerto para conexi髇 con servidor
         String servidor = ""; //IP o nombre DNS del servidor al que nos conectaremos
         String nickName = "";
         String mensaje = ""; //Mensaje a enviar al servidor
@@ -52,7 +37,7 @@ public class ClienteChat {
                 System.out.println("Conectado a servidor: " + skCliente.getInetAddress());
 
                 while (!mensaje.equals("bye")) {
-                    //Establecemos el canal de comunicaci贸n
+                    //Establecemos el canal de comunicaci髇
                     OutputStream auxOut = skCliente.getOutputStream();
                     DataOutputStream infoSalida = new DataOutputStream(auxOut);
                     System.out.print("Cliente--> ");
@@ -65,19 +50,19 @@ public class ClienteChat {
                 skCliente.close();
             } catch (UnknownHostException ex) {
                 System.out.println("Servidor no encontrado: " + ex.getMessage());
-                System.exit(1); //Salimos del programa con c贸digo de salida 1
+                System.exit(1); //Salimos del programa con c骴igo de salida 1
             } catch (IOException ex) {
                 System.out.println("Error al conectar al servidor: " + ex.getMessage());
-                System.exit(2); //Salimos del programa con c贸digo de salida 2
+                System.exit(2); //Salimos del programa con c骴igo de salida 2
             }
         } else {
             System.out.println("Introduce puerto, una IP  y mensaje");
-            System.exit(1); //Cerramos aplicaci贸n con c贸digo de salida 1
+            System.exit(1); //Cerramos aplicaci髇 con c骴igo de salida 1
         }
     }
 
     public void recibirDatosServer() throws IOException {
-        // Recibo e imprimo en pantalla el msje q me env铆a el server
+        // Recibo e imprimo en pantalla el msje q me env韆 el server
         // infoEntrada -> informcion que ingresa al cliente
         InputStream auxIn = skCliente.getInputStream();
         DataInputStream infoEntrada = new DataInputStream(auxIn);
