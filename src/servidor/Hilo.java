@@ -29,7 +29,7 @@ public class Hilo extends Thread
                 mensaje = entradaDatos.readUTF();
                 System.out.println("Mensaje de cliente " + numeroCliente + ": " + mensaje);
                 // Enviamos mensaje a cliente
-                salidaDatos.writeUTF("Recibido mensaje: " + mensaje);
+                salidaDatos.writeUTF(mensaje);
             }
         } catch(Exception e) {
             System.out.println(e.getMessage());

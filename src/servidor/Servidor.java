@@ -11,7 +11,7 @@ public class Servidor
             sc = new Scanner(System.in);
             System.out.println("Ingresa un puerto mayor de 1023 (bien conocido), o se asigna por defecto 6000: ");
             String puerto = sc.nextLine();
-            if (Integer.parseInt(puerto) <= 1023) puerto = "6000";
+            if ( puerto.length() == 0 || Integer.parseInt(puerto) <= 1023 ) puerto = "6000";
             ServerSocket skServidor = new ServerSocket(Integer.parseInt(puerto));
             System.out.println("Escucho en el puerto " + puerto);
             int numeroCliente = 0;
