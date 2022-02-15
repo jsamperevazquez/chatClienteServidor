@@ -2,6 +2,8 @@ package servidor;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class Hilo extends Thread
@@ -19,17 +21,16 @@ public class Hilo extends Thread
 
     public void run() {
         try {
-            // Mensajes recibidos de clientes
-            String mensaje;
-            // variable DataoutputStream para enviar mensajes a clientes
-            DataOutputStream salidaDatos = new DataOutputStream(skCliente.getOutputStream());
+            // Objeto recibido del cliente
+            Object dato;
+            ObjectOutputStream salidaDatos = new ObjectOutputStream(skCliente.getOutputStream());
             // Lectura de datos
-            DataInputStream entradaDatos = new DataInputStream(skCliente.getInputStream());
+            ObjectInputStream entradaDatos = new ObjectInputStream(skCliente.getInputStream());
             while (true) {
-                mensaje = entradaDatos.readUTF();
-                System.out.println("Mensaje de cliente " + numeroCliente + ": " + mensaje);
-                // Enviamos mensaje a cliente
-                salidaDatos.writeUTF(mensaje);
+                dato = entradaDatos.readObject();
+                System.out.println("Mensaje de cliente " + numeroCliente + ": " + dato);
+                // Enviamos objeto a cliente
+                salidaDatos.writeObject(dato);
             }
         } catch(Exception e) {
             System.out.println(e.getMessage());

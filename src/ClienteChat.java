@@ -22,12 +22,15 @@ public class ClienteChat {
     private JLabel direcLabel;
     private JLabel puertoLabel;
     private JLabel nickLabel;
-    static boolean infintoC = true;
-    static Socket skCliente;
-    static Integer puerto = 0; //Numero de puerto para conexión con servidor
-    static String servidor = ""; //IP o nombre DNS del servidor al que nos conectaremos
-    static String nick = "";
-    static String mensaje = ""; //Mensaje a enviar al servidor
+    private JLabel ipCliLab;
+    private JTextField ipCliTextField;
+    private static boolean infintoC = true;
+    private static Socket skCliente;
+    private static Integer puerto = 0; //Numero de puerto para conexión con servidor
+    private static String servidor = ""; //IP o nombre DNS del servidor al que nos conectaremos
+    private static String nick = "";
+    private static String mensaje = ""; //Mensaje a enviar al servidor
+    private static JFrame frame;
     ConectarServer conn = new ConectarServer();
 
     public ClienteChat() {
@@ -36,6 +39,10 @@ public class ClienteChat {
         chatLabel.setVisible(false);
         mensajeField.setVisible(false);
         msjLabel.setVisible(false);
+        nickField.setVisible(false);
+        nickLabel.setVisible(false);
+        ipCliLab.setVisible(false);
+        ipCliTextField.setVisible(false);
         cerrarButton.setVisible(false);
         conectarButton.addActionListener(new ActionListener() {
             @Override
@@ -57,7 +64,7 @@ public class ClienteChat {
                     try {
                         mensaje = mensajeField.getText();
                         conn.enviarDatosServer(mensaje);
-                    } catch (IOException | InterruptedException ex) {
+                    } catch (IOException | InterruptedException | ClassNotFoundException ex) {
                         ex.printStackTrace();
                     }
                 }));
@@ -77,35 +84,38 @@ public class ClienteChat {
     }
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("ANGEL_MESSENGER");
+        frame = new JFrame("ANGEL_MESSENGER");
         frame.setContentPane(new ClienteChat().panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 800); // Le damos un tamano deseado porque el pack() lo pone demasiado pequeno
+        frame.setSize(400, 400); // Le damos un tamano deseado porque el pack() lo pone demasiado pequeno
         frame.setVisible(true);
         frame.setLocationRelativeTo(null); //Situamos el frame en el centro de la pantalla
 
     }
 
-    class ConectarServer extends Thread {
+    class ConectarServer extends Thread implements Serializable{
         private static final String FIN = "bye";
 
         public void conectarServer(String address, Integer port, String nickName) throws IOException {
+            frame.setSize(600,600);
             textArea.setVisible(true);
             enviarButton.setVisible(true);
             chatLabel.setVisible(true);
             mensajeField.setVisible(true);
             msjLabel.setVisible(true);
             cerrarButton.setVisible(true);
+            ipCliLab.setVisible(true);
+            ipCliTextField.setVisible(true);
+            nickField.setVisible(true);
+            nickLabel.setVisible(true);
             direcField.setVisible(false);
             portField.setVisible(false);
-            nickField.setVisible(false);
             conectarButton.setVisible(false);
             direcLabel.setVisible(false);
             puertoLabel.setVisible(false);
-            nickLabel.setVisible(false);
+
 
             servidor = address;
-            nick = nickName;
             try {
                 puerto = port;
             } catch (Exception e) {
@@ -135,13 +145,14 @@ public class ClienteChat {
 
         }
 
-        public synchronized void enviarDatosServer(String mensaje) throws IOException, InterruptedException {
+        public synchronized void enviarDatosServer(String mensaje) throws IOException, InterruptedException, ClassNotFoundException {
 
 
             //Establecemos el canal de comunicación
-            OutputStream auxOut = skCliente.getOutputStream();
-            DataOutputStream infoSalida = new DataOutputStream(auxOut);
-            infoSalida.writeUTF(mensaje);
+            ObjectOutputStream objAux = new ObjectOutputStream(skCliente.getOutputStream());
+            Datos datosEnviar = new Datos(nickField.getText(),ipCliTextField.getText(),mensaje);
+            objAux.writeObject(datosEnviar);
+            //infoSalida.writeUTF(mensaje);
             if (mensaje.equalsIgnoreCase(FIN)) {
                 cerrarConexion();
                 System.exit(1);
@@ -152,13 +163,11 @@ public class ClienteChat {
 
         }
 
-        public void recibirDatosServer() throws IOException {
-            // Recibo e imprimo en pantalla el msje q me envía el server
-            // infoEntrada -> informcion que ingresa al cliente
-            InputStream auxIn = skCliente.getInputStream();
-            DataInputStream infoEntrada = new DataInputStream(auxIn);
-            String lectura = infoEntrada.readUTF();
-            textArea.setText("[" + nick + "]" + ": " + lectura);
+        public void recibirDatosServer() throws IOException, ClassNotFoundException {
+            // Recibo el objeto que envía el server
+            ObjectInputStream datosRecibidos = new ObjectInputStream(skCliente.getInputStream());
+            Object objetoLectura = datosRecibidos.readObject();
+            textArea.setText(objetoLectura.toString());
         }
 
         public void cerrarConexion() throws IOException {
@@ -166,6 +175,4 @@ public class ClienteChat {
         }
 
     }
-
-
 }

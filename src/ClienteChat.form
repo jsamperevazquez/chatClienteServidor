@@ -1,16 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="ClienteChat">
-  <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="GridLayoutManager" row-count="11" column-count="10" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="GridLayoutManager" row-count="12" column-count="11" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
-      <xy x="10" y="20" width="1681" height="560"/>
+      <xy x="10" y="20" width="1681" height="620"/>
     </constraints>
     <properties/>
     <border type="none"/>
     <children>
+      <component id="95639" class="javax.swing.JLabel" binding="chatLabel">
+        <constraints>
+          <grid row="6" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="10" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <alignmentY value="1.0"/>
+          <background color="-7274464"/>
+          <font name="Arial Black" size="16" style="1"/>
+          <foreground color="-4521970"/>
+          <text value="Chat:"/>
+        </properties>
+      </component>
+      <component id="8e0d2" class="javax.swing.JTextField" binding="mensajeField">
+        <constraints>
+          <grid row="9" column="1" row-span="1" col-span="7" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="4" use-parent-layout="false">
+            <preferred-size width="275" height="-1"/>
+            <maximum-size width="275" height="30"/>
+          </grid>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="7bef2" class="javax.swing.JLabel" binding="msjLabel">
+        <constraints>
+          <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="10" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <font name="Bodoni MT Black" size="16" style="1"/>
+          <foreground color="-4477691"/>
+          <text value="Mensaje"/>
+        </properties>
+      </component>
+      <component id="55ef9" class="javax.swing.JTextArea" binding="textArea">
+        <constraints>
+          <grid row="6" column="2" row-span="3" col-span="3" vsize-policy="6" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="300" height="250"/>
+            <maximum-size width="400" height="350"/>
+          </grid>
+        </constraints>
+        <properties>
+          <caretColor color="-6767757"/>
+          <editable value="false"/>
+          <text value=""/>
+        </properties>
+      </component>
+      <component id="1dd40" class="javax.swing.JButton" binding="enviarButton">
+        <constraints>
+          <grid row="10" column="1" row-span="1" col-span="10" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="689" height="30"/>
+            <maximum-size width="100" height="100"/>
+          </grid>
+        </constraints>
+        <properties>
+          <actionCommand value="Button"/>
+          <label value="Enviar"/>
+          <text value="Enviar"/>
+        </properties>
+      </component>
       <component id="db66b" class="javax.swing.JButton" binding="cerrarButton">
         <constraints>
-          <grid row="10" column="1" row-span="1" col-span="8" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
+          <grid row="11" column="1" row-span="1" col-span="10" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false">
             <preferred-size width="689" height="30"/>
             <maximum-size width="100" height="100"/>
           </grid>
@@ -20,6 +77,77 @@
           <text value="Cerrar"/>
           <verticalAlignment value="0"/>
         </properties>
+      </component>
+      <component id="861fa" class="javax.swing.JLabel" binding="titleLable">
+        <constraints>
+          <grid row="0" column="2" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="2" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <background color="-16731575"/>
+          <font name="Algerian" size="22" style="1"/>
+          <foreground color="-16731575"/>
+          <text value="Angel Live Messenger"/>
+        </properties>
+      </component>
+      <component id="136af" class="javax.swing.JTextField" binding="portField">
+        <constraints>
+          <grid row="2" column="2" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="9" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="689" height="30"/>
+            <maximum-size width="140" height="30"/>
+          </grid>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="b800f" class="javax.swing.JTextField" binding="direcField">
+        <constraints>
+          <grid row="1" column="2" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="345" height="56"/>
+            <maximum-size width="140" height="30"/>
+          </grid>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="d5194" class="javax.swing.JLabel" binding="ipCliLab">
+        <constraints>
+          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="IP"/>
+        </properties>
+      </component>
+      <component id="f485" class="javax.swing.JTextField" binding="ipCliTextField">
+        <constraints>
+          <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+            <maximum-size width="140" height="30"/>
+          </grid>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="89aa9" class="javax.swing.JButton" binding="conectarButton" default-binding="true">
+        <constraints>
+          <grid row="3" column="2" row-span="1" col-span="8" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="3" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Conectar"/>
+        </properties>
+      </component>
+      <component id="4cdd" class="javax.swing.JLabel" binding="nickLabel">
+        <constraints>
+          <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="NickName"/>
+        </properties>
+      </component>
+      <component id="8c992" class="javax.swing.JTextField" binding="nickField">
+        <constraints>
+          <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="689" height="30"/>
+            <maximum-size width="140" height="30"/>
+          </grid>
+        </constraints>
+        <properties/>
       </component>
       <component id="eb2f4" class="javax.swing.JLabel" binding="direcLabel">
         <constraints>
@@ -32,123 +160,12 @@
           <text value="Direccion"/>
         </properties>
       </component>
-      <component id="b800f" class="javax.swing.JTextField" binding="direcField">
-        <constraints>
-          <grid row="1" column="1" row-span="1" col-span="9" vsize-policy="0" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false">
-            <preferred-size width="345" height="56"/>
-            <maximum-size width="140" height="30"/>
-          </grid>
-        </constraints>
-        <properties/>
-      </component>
-      <component id="1dd40" class="javax.swing.JButton" binding="enviarButton">
-        <constraints>
-          <grid row="9" column="1" row-span="1" col-span="7" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
-            <preferred-size width="689" height="30"/>
-            <maximum-size width="100" height="100"/>
-          </grid>
-        </constraints>
-        <properties>
-          <actionCommand value="Button"/>
-          <label value="Enviar"/>
-          <text value="Enviar"/>
-        </properties>
-      </component>
       <component id="2f873" class="javax.swing.JLabel" binding="puertoLabel">
         <constraints>
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="Puerto"/>
-        </properties>
-      </component>
-      <component id="136af" class="javax.swing.JTextField" binding="portField">
-        <constraints>
-          <grid row="2" column="1" row-span="1" col-span="8" vsize-policy="0" hsize-policy="6" anchor="1" fill="0" indent="0" use-parent-layout="false">
-            <preferred-size width="689" height="30"/>
-            <maximum-size width="140" height="30"/>
-          </grid>
-        </constraints>
-        <properties/>
-      </component>
-      <component id="95639" class="javax.swing.JLabel" binding="chatLabel">
-        <constraints>
-          <grid row="5" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="10" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <alignmentY value="1.0"/>
-          <background color="-7274464"/>
-          <font name="Arial Black" size="16" style="1"/>
-          <foreground color="-4521970"/>
-          <text value="Chat:"/>
-        </properties>
-      </component>
-      <component id="4cdd" class="javax.swing.JLabel" binding="nickLabel">
-        <constraints>
-          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="NickName"/>
-        </properties>
-      </component>
-      <component id="8c992" class="javax.swing.JTextField" binding="nickField">
-        <constraints>
-          <grid row="3" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false">
-            <preferred-size width="689" height="30"/>
-            <maximum-size width="140" height="30"/>
-          </grid>
-        </constraints>
-        <properties/>
-      </component>
-      <component id="89aa9" class="javax.swing.JButton" binding="conectarButton" default-binding="true">
-        <constraints>
-          <grid row="4" column="1" row-span="1" col-span="3" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Conectar"/>
-        </properties>
-      </component>
-      <component id="8e0d2" class="javax.swing.JTextField" binding="mensajeField">
-        <constraints>
-          <grid row="8" column="2" row-span="1" col-span="2" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="4" use-parent-layout="false">
-            <preferred-size width="275" height="-1"/>
-            <maximum-size width="275" height="30"/>
-          </grid>
-        </constraints>
-        <properties/>
-      </component>
-      <component id="55ef9" class="javax.swing.JTextArea" binding="textArea">
-        <constraints>
-          <grid row="5" column="3" row-span="3" col-span="4" vsize-policy="6" hsize-policy="6" anchor="8" fill="0" indent="0" use-parent-layout="false">
-            <preferred-size width="300" height="250"/>
-            <maximum-size width="400" height="350"/>
-          </grid>
-        </constraints>
-        <properties>
-          <caretColor color="-6767757"/>
-          <editable value="false"/>
-          <text value=""/>
-        </properties>
-      </component>
-      <component id="861fa" class="javax.swing.JLabel" binding="titleLable">
-        <constraints>
-          <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="2" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <background color="-16731575"/>
-          <font name="Algerian" size="22" style="1"/>
-          <foreground color="-16731575"/>
-          <text value="Angel Live Messenger"/>
-        </properties>
-      </component>
-      <component id="7bef2" class="javax.swing.JLabel" binding="msjLabel">
-        <constraints>
-          <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="10" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <font name="Bodoni MT Black" size="16" style="1"/>
-          <foreground color="-4477691"/>
-          <text value="Mensaje"/>
         </properties>
       </component>
     </children>
