@@ -1,3 +1,5 @@
+package Entidad;
+
 import java.io.Serializable;
 
 public class Datos implements Serializable {
