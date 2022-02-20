@@ -8,6 +8,7 @@ public class Servidor
     private static Scanner sc;
     public Servidor() {
         try {
+            Socket[] listaSockets = new Socket[10];
             sc = new Scanner(System.in);
             System.out.println("Ingresa un puerto mayor de 1023 (bien conocido), o se asigna por defecto 6000: ");
             String puerto = sc.nextLine();
@@ -19,10 +20,10 @@ public class Servidor
 
             while (true) {
                 // Aceptamos conexiones
-                Socket socket = skServidor.accept();
+                listaSockets[numeroCliente] = skServidor.accept();
                 // Creamos nuevo hilo para atender cliente
+                (new Thread(new Hilo(listaSockets[numeroCliente], numeroCliente))).start();
                 ++numeroCliente;
-                (new Thread(new Hilo(socket, numeroCliente))).start();
             }
         } catch(Exception e) {
             System.out.println(e.getMessage());
