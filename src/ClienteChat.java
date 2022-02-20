@@ -57,7 +57,11 @@ public class ClienteChat {
             public void actionPerformed(ActionEvent e) {
                 Thread hilo = new Thread(conn);
                 mensaje = mensajeField.getText();
-                hilo.start();
+                try {
+                    conn.enviarDatosServer(mensaje);
+                } catch (IOException | InterruptedException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
         cerrarButton.addActionListener(new ActionListener() {
@@ -84,15 +88,22 @@ public class ClienteChat {
 
     class ConectarServer extends Thread {
         private static final String FIN = "bye";
+        String mensajes = "";
 
         @Override
         public void run() {
             try {
-                enviarDatosServer(mensaje);
-                recibirDatosServer();
-            } catch (IOException | InterruptedException e) {
+                while (true) {
+                    InputStream auxIn = skCliente.getInputStream();
+                    DataInputStream infoEntrada = new DataInputStream(auxIn);
+                    mensajes += infoEntrada.readUTF() + System.lineSeparator();
+                    textArea.setText(mensajes);
+
+                }
+            } catch (IOException e) {
                 e.printStackTrace();
             }
+
         }
 
         public void conectarServer(String address, Integer port, String nickName) throws IOException {
@@ -140,7 +151,7 @@ public class ClienteChat {
                 System.out.println("Introduce puerto, una IP  y mensaje");
                 System.exit(1); //Cerramos aplicación con código de salida 1
             }
-
+            this.start();
         }
 
         public synchronized void enviarDatosServer(String mensaje) throws IOException, InterruptedException {
@@ -155,14 +166,6 @@ public class ClienteChat {
             mensajeField.setText("");
         }
 
-        public void recibirDatosServer() throws IOException {
-            // Recibo e imprimo en pantalla el msje q me envía el server
-            // infoEntrada -> informcion que ingresa al cliente
-            InputStream auxIn = skCliente.getInputStream();
-            DataInputStream infoEntrada = new DataInputStream(auxIn);
-            String lectura = infoEntrada.readUTF();
-            textArea.append( lectura + "\n");
-        }
 
         public void cerrarConexion() throws IOException {
             skCliente.close();
