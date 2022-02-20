@@ -55,14 +55,8 @@ public class ClienteChat {
         enviarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Thread hilo = new Thread(new Thread(() -> {
-                    try {
-                        mensaje = mensajeField.getText();
-                        conn.enviarDatosServer(mensaje);
-                    } catch (IOException | InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
-                }));
+                Thread hilo = new Thread(conn);
+                mensaje = mensajeField.getText();
                 hilo.start();
             }
         });
@@ -90,6 +84,16 @@ public class ClienteChat {
 
     class ConectarServer extends Thread {
         private static final String FIN = "bye";
+
+        @Override
+        public void run() {
+            try {
+                enviarDatosServer(mensaje);
+                recibirDatosServer();
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
         public void conectarServer(String address, Integer port, String nickName) throws IOException {
             frame.setSize(600, 500); // Le damos un tamano deseado porque el pack() lo pone demasiado pequeno
@@ -149,9 +153,6 @@ public class ClienteChat {
                 System.exit(1);
             }
             mensajeField.setText("");
-            recibirDatosServer();
-
-
         }
 
         public void recibirDatosServer() throws IOException {
