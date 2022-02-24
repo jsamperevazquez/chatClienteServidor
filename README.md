@@ -35,5 +35,7 @@ Cada uno de los clientes verá reflejado los mensajes enviados por los diferentes
   
 ![Conexión server](https://github.com/jsamperevazquez/chatClienteServidor/blob/master/src/Media/serverCon.png)
 
-* Escuchar mensajes
+* Escuchar mensajes  
+
+
 ![Escucha Server](https://github.com/jsamperevazquez/chatClienteServidor/blob/master/src/Media/serverEsc.png)
