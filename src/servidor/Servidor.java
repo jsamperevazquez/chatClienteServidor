@@ -2,10 +2,28 @@ package servidor;
 import java.net.*;
 import java.util.Scanner;
 
+/**
+ * Clase Servidor.
+ * @version 0.0.2
+ * @author joseangelsamperevazquez
+ * Clase Servidor encargada de crear 10 sockets para atender mensajes de clietes.
+ * Solicita al usuario el número del puerto para levantar la conexion.
+ *
+ */
 public class Servidor
 {
+    /**
+     * Integer puerto para administrar el puerto del servidor
+     */
     private static int puerto;
+    /**
+     * Varible de tipo Scanner encargada de leer por teclado el numero de puerto
+     */
     private static Scanner sc;
+
+    /**
+     * Constructor de Servidor donde se establecen las condiciones del mismo
+     */
     public Servidor() {
         try {
             Socket[] listaSockets = new Socket[10];

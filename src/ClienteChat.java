@@ -6,7 +6,13 @@ import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-
+/**
+ * Clase ClienteChat
+ * @version 0.1.1
+ * @author joseangelsamperevazquez
+ * Clase con Interfaz en Swing para crear conexion con servidor y sala de chat
+ * Usa diferentes recursos de swing para facilitar al usuario el envio y recibo de mensajes
+ */
 public class ClienteChat {
     private JPanel panel1;
     private JLabel chatLabel;
@@ -32,6 +38,11 @@ public class ClienteChat {
     static String mensaje = ""; //Mensaje a enviar al servidor
     ConectarServer conn = new ConectarServer();
 
+    /**
+     * Constructor de ClienteChat
+     * Se ocultan algunos elementos hasta que se establezca la conexion
+     * Se generan los Listener para los botones de la interfaz
+     */
     public ClienteChat() {
         textArea.setVisible(false);
         enviarButton.setVisible(false);
@@ -69,13 +80,18 @@ public class ClienteChat {
             public void actionPerformed(ActionEvent e) {
                 try {
                     conn.cerrarConexion();
-                } catch (IOException ex) {
+                } catch (IOException | InterruptedException ex) {
                     ex.printStackTrace();
                 }
             }
         });
     }
 
+    /**
+     * Metodo Principal
+     * @param args
+     * Se establece las caracteristicas del panel
+     */
     public static void main(String[] args) {
         frame = new JFrame("ANGEL_MESSENGER");
         frame.setContentPane(new ClienteChat().panel1);
@@ -86,10 +102,26 @@ public class ClienteChat {
 
     }
 
+    /**
+     * Clase ConectarServer
+     * @version 0.0.9
+     * @author joseangelsamperevazquez
+     * Clase que hereda de Thread encargada de flujos de conexion con server, entrada y salida de datos y cierre de conexion
+     */
     class ConectarServer extends Thread {
+        /**
+         * Constante de tipo String para establecer condicion de cierre de conexion
+         */
         private static final String FIN = "bye";
+        /**
+         * Variable de tipo String para introducir los mensajes del cliente
+         */
         String mensajes = "";
 
+        /**
+         * Metodo run que ejecuta cada hilo
+         * Gestiona los flujos de entrada y salida, y muestra en el textArea el mensaje
+         */
         @Override
         public void run() {
             try {
@@ -106,6 +138,13 @@ public class ClienteChat {
 
         }
 
+        /**
+         * Metodo para crear conexion con Servidor
+         * @param address direccion de cliente
+         * @param port puerto del servidor
+         * @param nickName Nick del cliente
+         * @throws IOException Excepcion de tipo Input Output
+         */
         public void conectarServer(String address, Integer port, String nickName) throws IOException {
             frame.setSize(600, 500); // Le damos un tamano deseado porque el pack() lo pone demasiado pequeno
             textArea.setVisible(true);
@@ -154,6 +193,12 @@ public class ClienteChat {
             this.start();
         }
 
+        /**
+         * Metodo para envio de datos al servidor
+         * @param mensaje Mensaje para enviar
+         * @throws IOException Excepcion de tipo Input Output
+         * @throws InterruptedException Excepcion de tipo Interrupted
+         */
         public synchronized void enviarDatosServer(String mensaje) throws IOException, InterruptedException {
             //Establecemos el canal de comunicación
             OutputStream auxOut = skCliente.getOutputStream();
@@ -166,9 +211,17 @@ public class ClienteChat {
             mensajeField.setText("");
         }
 
-
-        public void cerrarConexion() throws IOException {
+        /**
+         * Metodo para cerrar la conexion con servidor y salida de aplicacion
+         * @throws IOException Excepcion Input Output
+         * @throws InterruptedException Excepcion Interrupted
+         */
+        public void cerrarConexion() throws IOException, InterruptedException {
             skCliente.close();
+            textArea.setText("Cerrada conexión\n" +
+                    "Que tengas buen día");
+            sleep(2000);
+            System.exit(1);
         }
 
     }
