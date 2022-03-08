@@ -37,11 +37,17 @@ public class Hilo extends Thread {
      */
     private static String datoRecibido = null;
 
+    /**
+     * Objeto de la clase Servidor
+     */
     private Servidor servidor;
-
+    /**
+     * ArrayList para acumular sockets
+     */
     private static ArrayList<Socket> listaH = new ArrayList<>();
     /**
      * Constructor de Hilo
+     * @param server Clase Servidor que recibe
      * @param skEnviado Socket recibido de Servidor
      * @param num Numero de cliente
      */

@@ -29,7 +29,9 @@ public class Servidor
      */
 
     Object lock = new Object();
-
+    /**
+     * ArrayList para acumular los hilos
+     */
    List<Hilo> hilos = new ArrayList<>();
 
 
