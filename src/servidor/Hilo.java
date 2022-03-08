@@ -17,35 +17,40 @@ public class Hilo extends Thread {
     /**
      * Variable de tipo Socket para conexion entre servidor y cliente
      */
-    Socket skCliente;
+    private Socket skCliente;
 
     // Número de clientes que se conectan a servidor
     /**
      * Variable integer para contabilizar el numero de clientes conectados
      */
-    int numeroCliente;
+    private static int numeroCliente;
     /**
      * Variable de tipo DataOutput para flujo de salida de datos hacia clientes
      */
-    static DataOutputStream salidaDatos;
+    private static DataOutputStream salidaDatos;
     /**
      * Variable de tipo DataInput para flujo de entrada de datos de cliente
      */
-    static DataInputStream entradaDatos;
+    private static DataInputStream entradaDatos;
     /**
      * Variable String inicializada en null para almacenar mensaje
      */
-    static String datoRecibido = null;
+    private static String datoRecibido = null;
 
+    private Servidor servidor;
+
+    private static ArrayList<Socket> listaH = new ArrayList<>();
     /**
      * Constructor de Hilo
      * @param skEnviado Socket recibido de Servidor
      * @param num Numero de cliente
      */
-    public Hilo(Socket skEnviado, int num) {
+    public Hilo(Servidor server,Socket skEnviado, int num) throws IOException {
+        this.servidor = server;
         skCliente = skEnviado;
         numeroCliente = num;
         System.out.println("Conexion con cliente: " + num);
+        listaH.add(skCliente);
     }
 
     /**
@@ -55,22 +60,26 @@ public class Hilo extends Thread {
      * Envia los datos a los diferentes clientes
      * Cierra conexion con clientes
      */
+
     public void run() {
         try {
             if (numeroCliente < 11) {
 
                 while (true) {
-                    //Escritura datos
-                    salidaDatos = new DataOutputStream(skCliente.getOutputStream());
-                    // Lectura de datos
-                    entradaDatos = new DataInputStream(skCliente.getInputStream());
-                    datoRecibido = entradaDatos.readUTF();
-                    System.out.println("Mensaje de cliente " + numeroCliente + ": " + datoRecibido);
-                    // Enviamos objeto a cliente
-                    salidaDatos.writeUTF(datoRecibido);
+
+
+                        // Lectura de datos
+                        entradaDatos = new DataInputStream(new BufferedInputStream(skCliente.getInputStream()));
+                        datoRecibido = entradaDatos.readUTF();
+                        System.out.println("Mensaje de cliente " + numeroCliente + ": " + datoRecibido);
+                        // Enviamos objeto a cliente
+                        enviarMensaje(datoRecibido);
                 }
-            } else
-                System.out.println("Servidor ocupado");
+            } else{
+                salidaDatos = new DataOutputStream(new BufferedOutputStream(skCliente.getOutputStream()));
+                salidaDatos.writeUTF("Sala llena");
+            }
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -79,6 +88,19 @@ public class Hilo extends Thread {
             numeroCliente--;
         } catch (Exception e) {
             System.out.println(e.getMessage());
+        }
+    }
+
+    /**
+     * Método para realizar broadcast a todos los clientes
+     * @param mensaje Mensaje que recibe como parámetro que es la lectura de los mensajes de los clientes
+     * @throws IOException
+     */
+    public void enviarMensaje(String mensaje) throws IOException {
+        for (Socket s:listaH
+        ) {
+            DataOutputStream output = new DataOutputStream(s.getOutputStream());
+            output.writeUTF(mensaje);
         }
     }
 }

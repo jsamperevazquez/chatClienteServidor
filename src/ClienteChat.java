@@ -2,16 +2,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
 /**
  * Clase ClienteChat
- * @version 0.1.1
+ *
  * @author joseangelsamperevazquez
  * Clase con Interfaz en Swing para crear conexion con servidor y sala de chat
  * Usa diferentes recursos de swing para facilitar al usuario el envio y recibo de mensajes
+ * @version 0.1.1
  */
 public class ClienteChat {
     private JPanel panel1;
@@ -30,7 +33,6 @@ public class ClienteChat {
     private JLabel puertoLabel;
     private JLabel nickLabel;
     private static JFrame frame;
-    static boolean infintoC = true;
     static Socket skCliente;
     static Integer puerto = 0; //Numero de puerto para conexión con servidor
     static String servidor = ""; //IP o nombre DNS del servidor al que nos conectaremos
@@ -50,6 +52,7 @@ public class ClienteChat {
         mensajeField.setVisible(false);
         msjLabel.setVisible(false);
         cerrarButton.setVisible(false);
+        panel1.setFocusable(true);
         conectarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -58,7 +61,7 @@ public class ClienteChat {
                 String nick = nickField.getText();
                 try {
                     conn.conectarServer(direccion, puerto, nick);
-                } catch (IOException ex) {
+                } catch (IOException | InterruptedException ex) {
                     ex.printStackTrace();
                 }
             }
@@ -66,7 +69,6 @@ public class ClienteChat {
         enviarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Thread hilo = new Thread(conn);
                 mensaje = mensajeField.getText();
                 try {
                     conn.enviarDatosServer(mensaje);
@@ -75,22 +77,41 @@ public class ClienteChat {
                 }
             }
         });
-        cerrarButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    conn.cerrarConexion();
-                } catch (IOException | InterruptedException ex) {
-                    ex.printStackTrace();
-                }
+        cerrarButton.addActionListener(e -> {
+            try {
+                conn.cerrarConexion();
+            } catch (IOException | InterruptedException ex) {
+                ex.printStackTrace();
             }
         });
+        mensajeField.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                mensaje = mensajeField.getText();
+                if (e.getExtendedKeyCode() == KeyEvent.VK_ENTER) {
+                    try {
+                        conn.enviarDatosServer(mensaje);
+                    } catch (IOException | InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
+
     }
 
     /**
      * Metodo Principal
-     * @param args
-     * Se establece las caracteristicas del panel
+     *
+     * @param args Se establece las caracteristicas del panel
      */
     public static void main(String[] args) {
         frame = new JFrame("ANGEL_MESSENGER");
@@ -104,9 +125,10 @@ public class ClienteChat {
 
     /**
      * Clase ConectarServer
-     * @version 0.0.9
+     *
      * @author joseangelsamperevazquez
      * Clase que hereda de Thread encargada de flujos de conexion con server, entrada y salida de datos y cierre de conexion
+     * @version 0.0.9
      */
     class ConectarServer extends Thread {
         /**
@@ -118,6 +140,10 @@ public class ClienteChat {
          */
         String mensajes = "";
 
+        static DataInputStream infoEntrada;
+
+        static DataOutputStream infoSalida;
+
         /**
          * Metodo run que ejecuta cada hilo
          * Gestiona los flujos de entrada y salida, y muestra en el textArea el mensaje
@@ -127,10 +153,9 @@ public class ClienteChat {
             try {
                 while (true) {
                     InputStream auxIn = skCliente.getInputStream();
-                    DataInputStream infoEntrada = new DataInputStream(auxIn);
+                    infoEntrada = new DataInputStream(auxIn);
                     mensajes += infoEntrada.readUTF() + System.lineSeparator();
                     textArea.setText(mensajes);
-
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -140,12 +165,13 @@ public class ClienteChat {
 
         /**
          * Metodo para crear conexion con Servidor
-         * @param address direccion de cliente
-         * @param port puerto del servidor
+         *
+         * @param address  direccion de cliente
+         * @param port     puerto del servidor
          * @param nickName Nick del cliente
          * @throws IOException Excepcion de tipo Input Output
          */
-        public void conectarServer(String address, Integer port, String nickName) throws IOException {
+        public void conectarServer(String address, Integer port, String nickName) throws IOException, InterruptedException {
             frame.setSize(600, 500); // Le damos un tamano deseado porque el pack() lo pone demasiado pequeno
             textArea.setVisible(true);
             enviarButton.setVisible(true);
@@ -190,41 +216,52 @@ public class ClienteChat {
                 System.out.println("Introduce puerto, una IP  y mensaje");
                 System.exit(1); //Cerramos aplicación con código de salida 1
             }
+            enviarDatosServer("Nuevo cliente conectado");
             this.start();
         }
 
         /**
          * Metodo para envio de datos al servidor
+         *
          * @param mensaje Mensaje para enviar
-         * @throws IOException Excepcion de tipo Input Output
+         * @throws IOException          Excepcion de tipo Input Output
          * @throws InterruptedException Excepcion de tipo Interrupted
          */
         public synchronized void enviarDatosServer(String mensaje) throws IOException, InterruptedException {
             //Establecemos el canal de comunicación
             OutputStream auxOut = skCliente.getOutputStream();
-            DataOutputStream infoSalida = new DataOutputStream(auxOut);
-            infoSalida.writeUTF(nick + ": " + mensaje);
-            if (mensaje.equalsIgnoreCase(FIN)) {
-                cerrarConexion();
-                System.exit(1);
+            infoSalida = new DataOutputStream(auxOut);
+            if (mensaje.length() > 0) {
+                switch (mensaje) {
+                    case FIN -> {
+                        cerrarConexion();
+                    }
+
+                    case "Nuevo cliente conectado" -> {
+                        infoSalida.writeUTF(mensaje + " (" + nick + ")");
+                        mensajeField.setText("");
+                    }
+                    case "dejo este chat" -> {
+                        infoSalida.writeUTF(nick + " " + mensaje);
+                        mensajeField.setText("");
+                    }
+                    default -> {
+                        infoSalida.writeUTF(nick + ": " + mensaje);
+                        mensajeField.setText("");
+                    }
+                }
             }
-            mensajeField.setText("");
         }
 
         /**
          * Metodo para cerrar la conexion con servidor y salida de aplicacion
-         * @throws IOException Excepcion Input Output
+         *
+         * @throws IOException          Excepcion Input Output
          * @throws InterruptedException Excepcion Interrupted
          */
         public void cerrarConexion() throws IOException, InterruptedException {
-            skCliente.close();
-            textArea.setText("Cerrada conexión\n" +
-                    "Que tengas buen día");
-            sleep(2000);
+            enviarDatosServer("dejo este chat");
             System.exit(1);
         }
-
     }
-
-
 }

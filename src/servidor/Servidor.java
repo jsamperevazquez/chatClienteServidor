@@ -1,5 +1,8 @@
 package servidor;
+import java.io.IOException;
 import java.net.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -24,9 +27,14 @@ public class Servidor
     /**
      * Constructor de Servidor donde se establecen las condiciones del mismo
      */
+
+    Object lock = new Object();
+
+   List<Hilo> hilos = new ArrayList<>();
+
+
     public Servidor() {
         try {
-            Socket[] listaSockets = new Socket[10];
             sc = new Scanner(System.in);
             System.out.println("Ingresa un puerto mayor de 1023 (bien conocido), o se asigna por defecto 6000: ");
             String puerto = sc.nextLine();
@@ -38,13 +46,28 @@ public class Servidor
 
             while (true) {
                 // Aceptamos conexiones
-                listaSockets[numeroCliente] = skServidor.accept();
+                Socket skcliente = skServidor.accept();
+
                 // Creamos nuevo hilo para atender cliente
-                (new Thread(new Hilo(listaSockets[numeroCliente], numeroCliente))).start();
+                Hilo hilo = new Hilo(this,skcliente,numeroCliente);
+                synchronized (lock){
+                    hilos.add(hilo);
+                }
+                new Thread(hilo).start();
                 ++numeroCliente;
             }
         } catch(Exception e) {
             System.out.println(e.getMessage());
+        }
+    }
+        void broadCast(String mensaje) throws IOException {
+        List<Hilo> copiaHilos;
+        synchronized (lock) {
+            copiaHilos = new ArrayList<>(hilos);
+        }
+        for (Hilo hilo:copiaHilos
+             ) {
+            hilo.enviarMensaje(mensaje);
         }
     }
 }
